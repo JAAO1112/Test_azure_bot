@@ -2,6 +2,8 @@ const restify = require('restify');
 const { BotFrameworkAdapter } = require('botbuilder');
 
 // Configuración del adaptador
+console.log("App ID:", process.env.MICROSOFT_APP_ID);
+console.log("App Password:", process.env.MICROSOFT_APP_PASSWORD ? "OK" : "MISSING");
 const adapter = new BotFrameworkAdapter({
   appId: process.env.MICROSOFT_APP_ID,
   appPassword: process.env.MICROSOFT_APP_PASSWORD
@@ -28,5 +30,6 @@ server.post('/api/messages', async (req, res) => {
     }
   });
 });
+
 
 
