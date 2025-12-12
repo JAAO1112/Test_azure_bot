@@ -12,13 +12,14 @@ const adapter = new BotFrameworkAdapter({
 // Crear servidor
 const server = restify.createServer();
 server.listen(process.env.PORT || 3978, () => {
-  console.log('Bot escuchando en ${server.url}');
+  console.log(`Bot escuchando en ${server.url}`);
 });
 
-// Registrar endpoint /api/messages
-server.post('/api/messages', async (req, res) => {
-  await adapter.processActivity(req, res, async (context) => {
-    if (context.activity.type === 'message') {
+// Definir lógica del bot
+class MyBot extends ActivityHandler {
+  constructor() {
+    super();
+    this.onMessage(async (context, next) => {
       const text = context.activity.text.toLowerCase();
       if (text.includes('hola')) {
         await context.sendActivity('¡Hola! ¿En qué puedo ayudarte?');
@@ -27,9 +28,20 @@ server.post('/api/messages', async (req, res) => {
       } else {
         await context.sendActivity('No entendí eso. Prueba con "hola" o "ayuda".');
       }
-    }
+      await next();
+    });
+  }
+}
+
+const bot = new MyBot();
+
+// Registrar endpoint /api/messages
+server.post('/api/messages', async (req, res) => {
+  await adapter.processActivity(req, res, async (context) => {
+    await bot.run(context);
   });
 });
+
 
 
 
