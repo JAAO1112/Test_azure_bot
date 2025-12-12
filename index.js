@@ -14,8 +14,8 @@ server.listen(process.env.PORT || 3978, () => {
 });
 
 // Registrar endpoint /api/messages
-server.post('/api/messages', (req, res) => {
-  adapter.processActivity(req, res, async (context) => {
+server.post('/api/messages', async (req, res) => {
+  await adapter.processActivity(req, res, async (context) => {
     if (context.activity.type === 'message') {
       const text = context.activity.text.toLowerCase();
       if (text.includes('hola')) {
@@ -28,4 +28,5 @@ server.post('/api/messages', (req, res) => {
     }
   });
 });
+
 
