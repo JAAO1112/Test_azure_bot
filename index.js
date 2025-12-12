@@ -1,5 +1,5 @@
 const restify = require('restify');
-const { BotFrameworkAdapter } = require('botbuilder');
+const { BotFrameworkAdapter, ActivityHandler } = require('botbuilder');
 
 // Configuración del adaptador
 console.log("App ID:", process.env.MICROSOFT_APP_ID);
@@ -20,7 +20,7 @@ class MyBot extends ActivityHandler {
   constructor() {
     super();
     this.onMessage(async (context, next) => {
-      const text = context.activity.text.toLowerCase();
+      const text = (context.activity.text || "").toLowerCase();
       if (text.includes('hola')) {
         await context.sendActivity('¡Hola! ¿En qué puedo ayudarte?');
       } else if (text.includes('ayuda')) {
@@ -41,7 +41,3 @@ server.post('/api/messages', async (req, res) => {
     await bot.run(context);
   });
 });
-
-
-
-
