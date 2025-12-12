@@ -13,17 +13,19 @@ server.listen(process.env.PORT || 3978, () => {
   console.log('Bot escuchando en ${server.url}');
 });
 
-// Lógica del bot
-adapter.processActivity(async (context) => {
-  if (context.activity.type === 'message') {
-    const text = context.activity.text.toLowerCase();
-    if (text.includes('hola')) {
-      await context.sendActivity('¡Hola! ¿En qué puedo ayudarte?');
-    } else if (text.includes('ayuda')) {
-      await context.sendActivity('Puedo ayudarte con información básica. Pregúntame algo.');
-    } else {
-      await context.sendActivity('No entendí eso. Prueba con "hola" o "ayuda".');
+// Registrar endpoint /api/messages
+server.post('/api/messages', (req, res) => {
+  adapter.processActivity(req, res, async (context) => {
+    if (context.activity.type === 'message') {
+      const text = context.activity.text.toLowerCase();
+      if (text.includes('hola')) {
+        await context.sendActivity('¡Hola! ¿En qué puedo ayudarte?');
+      } else if (text.includes('ayuda')) {
+        await context.sendActivity('Puedo ayudarte con información básica. Pregúntame algo.');
+      } else {
+        await context.sendActivity('No entendí eso. Prueba con "hola" o "ayuda".');
+      }
     }
-  }
-
+  });
 });
+
