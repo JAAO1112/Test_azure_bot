@@ -10,7 +10,7 @@ const adapter = new BotFrameworkAdapter({
 // Crear servidor
 const server = restify.createServer();
 server.listen(process.env.PORT || 3978, () => {
-  console.log(`Bot escuchando en ${server.url}`);
+  console.log('Bot escuchando en ${server.url}');
 });
 
 // Lógica del bot
@@ -25,4 +25,5 @@ adapter.processActivity(async (context) => {
       await context.sendActivity('No entendí eso. Prueba con "hola" o "ayuda".');
     }
   }
+
 });
